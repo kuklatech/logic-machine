@@ -1,5 +1,6 @@
-import { LogicMachine, OutputScheme } from "../logic-machine";
+import { LogicMachine} from "../logic-machine";
 import { impositionRules } from "./logic-machine.data";
+import {OutputScheme} from "../types";
 
 const outputForImposition: OutputScheme = { isForImposition: "boolean" };
 const outputDownloadBulkMode: OutputScheme = { downloadBulkMode: "string" };

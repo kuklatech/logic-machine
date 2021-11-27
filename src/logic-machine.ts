@@ -3,22 +3,14 @@ import {
   Condition,
   FirstPrinciples,
   LogicOperator,
-  Rules,
+  Output,
+  OutputScheme,
+  OutputValue,
+  OutputValueType,
   Relation,
+  Rules,
   Treat,
 } from "./types";
-
-export type OutputValueType = "string" | "boolean" | "number";
-
-export type OutputScheme = {
-  [key: string]: OutputValueType;
-};
-
-export type OutputValue = string | boolean | number;
-
-export type Output = {
-  [key: string]: OutputValue;
-};
 
 export class LogicMachine {
   private firstPrinciples: FirstPrinciples = {};

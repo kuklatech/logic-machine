@@ -44,3 +44,11 @@ export type Rules = {
 export type FirstPrinciples = {
   [key: string]: AttributeValue;
 };
+export type OutputValueType = "string" | "boolean" | "number";
+export type OutputScheme = {
+    [key: string]: OutputValueType;
+};
+export type OutputValue = string | boolean | number;
+export type Output = {
+    [key: string]: OutputValue;
+};
