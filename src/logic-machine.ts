@@ -6,7 +6,7 @@ import {
   Rules,
   Relation,
   Treat,
-} from "./rules";
+} from "./types";
 
 export type OutputValueType = "string" | "boolean" | "number";
 
@@ -21,7 +21,7 @@ export type Output = {
 };
 
 export class LogicMachine {
-  private firstPrinciples: FirstPrinciples;
+  private firstPrinciples: FirstPrinciples = {};
 
   constructor(private rules: Rules) {}
 
@@ -35,10 +35,7 @@ export class LogicMachine {
         (treat) => treat.name === neededOutput
       );
 
-      console.log("treats :>>", treats);
-
       for (const treat of treats) {
-        console.log("treat :>>", treat);
         const result = this.castReturnedValue(
           this.calculateOutputForTreat(treat),
           resultType
@@ -62,14 +59,10 @@ export class LogicMachine {
 
   private calculateOutputForTreat(treat: Treat): OutputValue {
     const results: boolean[] = [];
+    let i = 0;
     for (const condition of treat.conditions) {
-      console.log("\ncondition :>>", condition);
-      const calculatedCondition = this.calculateCondition(condition);
-      console.log("condition.relation :>>", condition.relation);
-      console.log("condition.value :>>", condition.value);
-
-      console.log("calculatedCondition :>>", calculatedCondition);
-      results.push(calculatedCondition);
+      const result = this.calculateCondition(condition);
+      results.push(result);
     }
 
     return this.calculateOutputForLogicalSentence(treat, results);
@@ -95,6 +88,9 @@ export class LogicMachine {
     } else if (resultType === "number") {
       return value as number;
     } else if (resultType === "boolean") {
+      if (value === true || value === false) {
+        return value
+      }
       if (value.toLowerCase() === "true") {
         return true;
       }
@@ -108,9 +104,8 @@ export class LogicMachine {
   }
 
   private calculateCondition(condition: Condition) {
-    if (this.isFirstPrinciple(condition)) {
+    if (this.isSolved(condition)) {
       const value = this.getFirstPricinpleValue(condition);
-      console.log("value (simple) :>>", value);
 
       return this.solveConditionFor(condition, value);
     } else {
@@ -125,10 +120,6 @@ export class LogicMachine {
 
       const value = this.calculateOutputForTreat(treat) as AttributeValue;
       this.firstPrinciples[condition.attribute] = value;
-      console.log("this.firstPrinciples :>>", this.firstPrinciples);
-      console.log("condition (complex):>>", condition);
-      console.log("value (complex) :>>", value);
-      // const result = this.solveConditionFor(condition, value);
 
       const result = this.calculateCondition(condition);
       return result;
@@ -139,17 +130,11 @@ export class LogicMachine {
     condition: Condition,
     value: AttributeValue
   ): boolean {
-    console.log("condition.attribute :>>", condition.attribute);
-    console.log("condition.value :>>", condition.value);
-    console.log("condition.relation :>>", condition.relation);
-    console.log("value (solveConditionFor) :>>", value);
-
     switch (condition.relation) {
       case Relation.EQUAL:
         return this.isEqual(condition, value);
       case Relation.NOT_EQUAL:
         const result = !this.isEqual(condition, value);
-        console.log("result (NOT_EQUAL) :>>", result);
         return result;
       case Relation.IN:
         const conditionValues = (condition.value as string).split(",");
@@ -161,29 +146,31 @@ export class LogicMachine {
   }
 
   private isEqual(condition: Condition, value: string | number) {
-    if (this.isBooleanLikeValue(condition.value)) {
+    if (this.isBoolean(condition.value)) {
       const result =
         this.castReturnedValue(condition.value, "boolean") ===
         this.castReturnedValue(value, "boolean");
-      console.log("result (casted to boolean) :>>", result);
       return result;
     }
 
     const result = condition.value === value;
-    console.log("result (string comparison) :>>", result);
     return result;
   }
 
-  private isBooleanLikeValue(value: any): boolean {
+  private isBoolean(value: any): boolean {
+    if (value === true || value === false) {
+      return true
+    }
+
     const clearedValue = value.toLowerCase().trim();
 
     return ["true", "false"].includes(clearedValue);
   }
 
-  private isFirstPrinciple(condition: Condition): boolean {
+  private isSolved(condition: Condition): boolean {
     const attributeName = condition.attribute;
-
-    return !!this.firstPrinciples[attributeName];
+    // Note: it may contain false, so we must check if the value exists, not if it's false
+    return this.firstPrinciples[attributeName] !== undefined;
   }
 
   private getFirstPricinpleValue(condition) {
@@ -201,11 +188,19 @@ export class LogicMachine {
         return treat.name === attributeName && treat.value === attributeResult;
       });
 
+      if (!treat) {
+        throw new Error("Not rules available for this attribute!");
+      }
+
       return treat;
     } else {
       const treat = this.rules.treats.find(
         (treat) => treat.name === condition.attribute
       );
+
+      if (!treat) {
+        throw new Error("Not rules available for this attribute!");
+      }
 
       return treat;
     }
