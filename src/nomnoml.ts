@@ -18,7 +18,7 @@ export class Nomnoml implements UmlGenerator {
         const conditionText = `${condition.attribute} ${condition.relation} ${condition.value}`
         conditions.push(conditionText)
 
-        const attributeRule = `[${condition.attribute}] -> [${conditionText}]`
+        const attributeRule = `[${condition.attribute}] -> [<choice>${conditionText}]`
         rulesText.push(attributeRule)
 
         const isComplexAttribute = condition.attribute.includes(':')
