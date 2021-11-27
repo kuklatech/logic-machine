@@ -1,4 +1,4 @@
-import { logicScheme } from "./logic-scheme";
+import { logicScheme } from "./rules";
 import { LogicMachine, OutputScheme } from "./logic-machine";
 
 // Note: `attribute` may have simple value, relates then to the treat

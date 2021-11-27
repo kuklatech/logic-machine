@@ -36,7 +36,7 @@ export type Treat = {
   conditions: Condition[];
 };
 
-export type LogicScheme = {
+export type Rules = {
   lists: List[];
   treats: Treat[];
 };
@@ -45,7 +45,7 @@ export type FirstPrinciples = {
   [key: string]: AttributeValue;
 };
 
-export const logicScheme: LogicScheme = {
+export const logicScheme: Rules = {
   lists: [
     {
       name: "downloadBulkMode",

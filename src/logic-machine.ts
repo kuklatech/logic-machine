@@ -3,10 +3,10 @@ import {
   Condition,
   FirstPrinciples,
   LogicOperator,
-  LogicScheme,
+  Rules,
   Relation,
   Treat,
-} from "./logic-scheme";
+} from "./rules";
 
 export type OutputValueType = "string" | "boolean" | "number";
 
@@ -23,25 +23,38 @@ export type Output = {
 export class LogicMachine {
   private firstPrinciples: FirstPrinciples;
 
-  constructor(private logicScheme: LogicScheme) {}
+  constructor(private rules: Rules) {}
 
-  run(outputScheme: OutputScheme, firstPrinciples: FirstPrinciples): Output[] {
+  run(outputScheme: OutputScheme, firstPrinciples: FirstPrinciples): Output {
     this.firstPrinciples = firstPrinciples;
-    const results: Output[] = [];
+    const results: Output = {};
 
     for (const neededOutput in outputScheme) {
       const resultType: OutputValueType = outputScheme[neededOutput];
-      const treat = this.logicScheme.treats.find(
+      const treats = this.rules.treats.filter(
         (treat) => treat.name === neededOutput
       );
-      console.log("treat :>>", treat);
 
-      results.push({
-        [neededOutput]: this.castReturnedValue(
+      console.log("treats :>>", treats);
+
+      for (const treat of treats) {
+        console.log("treat :>>", treat);
+        const result = this.castReturnedValue(
           this.calculateOutputForTreat(treat),
           resultType
-        ),
-      });
+        );
+
+        const isResultFalseButNoOtherValueStoredYet =
+          result === false && !results[neededOutput];
+
+        if (isResultFalseButNoOtherValueStoredYet) {
+          results[neededOutput] = result;
+        }
+
+        if (result !== false) {
+          results[neededOutput] = result;
+        }
+      }
     }
 
     return results;
@@ -184,13 +197,13 @@ export class LogicMachine {
     if (isComplexAttribute) {
       const [attributeName, attributeResult] = condition.attribute.split(":");
 
-      const treat = this.logicScheme.treats.find((treat) => {
+      const treat = this.rules.treats.find((treat) => {
         return treat.name === attributeName && treat.value === attributeResult;
       });
 
       return treat;
     } else {
-      const treat = this.logicScheme.treats.find(
+      const treat = this.rules.treats.find(
         (treat) => treat.name === condition.attribute
       );
 
