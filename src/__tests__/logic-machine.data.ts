@@ -13,7 +13,7 @@ export const impositionRules: Rules = {
       conditions: []
     }
   ],
-  treats: [
+  traits: [
     {
       name: 'downloadBulkMode',
       value: 'impositionFiles',

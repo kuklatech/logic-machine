@@ -29,7 +29,7 @@ export type List = {
   conditions: Condition[];
 };
 
-export type Treat = {
+export type Trait = {
   name: string;
   value: AttributeValue;
   logicOperator: LogicOperator;
@@ -38,7 +38,7 @@ export type Treat = {
 
 export type Rules = {
   lists: List[];
-  treats: Treat[];
+  traits: Trait[];
 };
 
 export type FirstPrinciples = {

@@ -17,7 +17,7 @@ const rulesText =
   "[vendor:alt AND color:fullcolor] N -> [<state>all imposition files]";
 
 
-impositionRules.treats
+impositionRules.traits
 
 describe("UML", () => {
   it("should generate nomnoml format", () => {
