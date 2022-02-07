@@ -1,126 +1,126 @@
-import {LogicOperator, Relation, Rules} from "../types";
+import { LogicOperator, Relation, Rules } from '../types'
 
 export const impositionRules: Rules = {
   lists: [
     {
-      name: "downloadBulkMode",
+      name: 'downloadBulkMode',
       values: [
-        "impositionFiles",
-        "impositionOnlyPrintWithDieline",
-        "productionFiles",
+        'impositionFiles',
+        'impositionOnlyPrintWithDieline',
+        'productionFiles'
       ],
       logicOperator: LogicOperator.AND,
-      conditions: [],
-    },
+      conditions: []
+    }
   ],
   treats: [
     {
-      name: "downloadBulkMode",
-      value: "impositionFiles",
+      name: 'downloadBulkMode',
+      value: 'impositionFiles',
       logicOperator: LogicOperator.AND,
       conditions: [
         {
-          attribute: "isForImposition",
+          attribute: 'isForImposition',
           relation: Relation.EQUAL,
-          value: "TRUE",
+          value: 'TRUE'
         },
         {
-          attribute: "downloadBulkMode:impositionOnlyPrintWithDieline",
+          attribute: 'downloadBulkMode:impositionOnlyPrintWithDieline',
           relation: Relation.NOT_EQUAL,
-          value: "impositionOnlyPrintWithDieline",
-        },
-      ],
-    },
-    {
-      name: "downloadBulkMode",
-      value: "impositionOnlyPrintWithDieline",
-      logicOperator: LogicOperator.AND,
-      conditions: [
-        {
-          attribute: "vendor",
-          relation: Relation.EQUAL,
-          value: "alt",
-        },
-        {
-          attribute: "color",
-          relation: Relation.EQUAL,
-          value: "fullcolor",
-        },
-        {
-          attribute: "isForImposition",
-          relation: Relation.EQUAL,
-          value: "TRUE",
-        },
-      ],
-    },
-    {
-      name: "downloadBulkMode",
-      value: "productionFiles",
-      logicOperator: LogicOperator.AND,
-      conditions: [
-        {
-          attribute: "vendor",
-          relation: Relation.EQUAL,
-          value: "alt",
-        },
-        {
-          attribute: "size",
-          relation: Relation.NOT_IN,
-          value: "F23,F33"
+          value: 'impositionOnlyPrintWithDieline'
         }
-      ],
+      ]
     },
     {
-      name: "isForImposition",
-      value: "TRUE",
+      name: 'downloadBulkMode',
+      value: 'impositionOnlyPrintWithDieline',
       logicOperator: LogicOperator.AND,
       conditions: [
         {
-          attribute: "vendor",
+          attribute: 'vendor',
           relation: Relation.EQUAL,
-          value: "alt",
+          value: 'alt'
         },
         {
-          attribute: "size",
-          relation: Relation.IN,
-          value: "F23,F33",
+          attribute: 'color',
+          relation: Relation.EQUAL,
+          value: 'fullcolor'
         },
-      ],
+        {
+          attribute: 'isForImposition',
+          relation: Relation.EQUAL,
+          value: 'TRUE'
+        }
+      ]
     },
     {
-      name: "vendor",
-      value: "fallback",
+      name: 'downloadBulkMode',
+      value: 'productionFiles',
+      logicOperator: LogicOperator.AND,
+      conditions: [
+        {
+          attribute: 'vendor',
+          relation: Relation.EQUAL,
+          value: 'alt'
+        },
+        {
+          attribute: 'size',
+          relation: Relation.NOT_IN,
+          value: 'F23,F33'
+        }
+      ]
+    },
+    {
+      name: 'isForImposition',
+      value: 'TRUE',
+      logicOperator: LogicOperator.AND,
+      conditions: [
+        {
+          attribute: 'vendor',
+          relation: Relation.EQUAL,
+          value: 'alt'
+        },
+        {
+          attribute: 'size',
+          relation: Relation.IN,
+          value: 'F23,F33'
+        }
+      ]
+    },
+    {
+      name: 'vendor',
+      value: 'fallback',
       logicOperator: LogicOperator.AND,
       conditions: []
     },
     {
-      name: "vendor",
-      value: "alt",
+      name: 'vendor',
+      value: 'alt',
       logicOperator: LogicOperator.OR,
       conditions: [
         {
-          attribute: "qty",
+          attribute: 'qty',
           relation: Relation.GREATER_OR_EQUAL,
           value: 10000
         },
         {
-          attribute: "color",
+          attribute: 'color',
           relation: Relation.EQUAL,
-          value: "fullcolor"
+          value: 'fullcolor'
         }
       ]
     },
     {
-      name: "vendor",
-      value: "second",
+      name: 'vendor',
+      value: 'second',
       logicOperator: LogicOperator.AND,
       conditions: [
         {
-          attribute: "qty",
+          attribute: 'qty',
           relation: Relation.LESS,
           value: 10000
-        },
+        }
       ]
     }
-  ],
-};
+  ]
+}

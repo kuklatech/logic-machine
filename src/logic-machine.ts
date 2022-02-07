@@ -81,7 +81,7 @@ export class LogicMachine {
       return value as number;
     } else if (resultType === "boolean") {
       if (value === true || value === false) {
-        return value
+        return value;
       }
       if (value.toLowerCase() === "true") {
         return true;
@@ -151,7 +151,7 @@ export class LogicMachine {
 
   private isBoolean(value: any): boolean {
     if (value === true || value === false) {
-      return true
+      return true;
     }
 
     const clearedValue = value.toLowerCase().trim();
